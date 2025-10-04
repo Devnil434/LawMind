@@ -9,28 +9,6 @@ LawMind is a legal AI assistant that helps with legal research and document anal
 - Meta Llama 3 – Summarization + Fairness scoring
 - Docker MCP – Multi-service orchestration
 
-lawmind/
-├── backend/
-│   ├── app.py
-│   ├── requirements.txt
-│   ├── cerebras_client.py
-│   ├── clause_extractor.py
-│   └── uploads/
-│
-├── frontend/
-│   ├── pages/
-│   │   └── upload.js
-│   ├── components/
-│   │   └── ClauseViewer.jsx
-│   └── package.json
-│
-├── docker/
-│   ├── Dockerfile.backend
-│   └── Dockerfile.frontend
-│
-└── README.md
-
-
 ## 🧩 Features
 - Upload contracts
 - Extract & classify clauses
