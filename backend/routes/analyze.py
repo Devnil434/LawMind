@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from ..services import cerebras_service, llama_service
+from services import cerebras_service, llama_service
 
 router = APIRouter(prefix="/analyze", tags=["analyze"])
 

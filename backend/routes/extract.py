@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from ..services import cerebras_service
+from services import cerebras_service
 import traceback
 
 router = APIRouter(prefix="/extract", tags=["extract"])

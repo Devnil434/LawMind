@@ -4,7 +4,7 @@ import asyncio
 import httpx
 import json
 import re
-from ..config import Config
+from config import Config
 
 async def analyze_contract(text: str) -> str:
     """
@@ -36,7 +36,7 @@ async def analyze_contract(text: str) -> str:
     #         "https://api.cerebras.ai/v1/analyze",
     #         headers=headers,
     #         json=data
-    #     )
+    #     }
     #     response.raise_for_status()
     #     return response.json()["analysis"]
     
@@ -268,7 +268,7 @@ async def extract_clauses(text: str) -> dict:
                 "https://api.cerebras.ai/v1/inference",  # Replace with correct endpoint
                 headers=headers,
                 json=data
-            )
+            }
             
             # Check if the request was successful
             response.raise_for_status()
