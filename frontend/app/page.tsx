@@ -1,5 +1,6 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [text, setText] = useState("");
@@ -10,7 +11,24 @@ export default function Home() {
   const [summarizing, setSummarizing] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [authenticated, setAuthenticated] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+
+  // Check if user is authenticated on component mount
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
+    } else {
+      setAuthenticated(true);
+    }
+  }, [router]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/login");
+  };
 
   const handleUpload = async (e: any) => {
     const file = e.target.files[0];
@@ -26,12 +44,20 @@ export default function Home() {
     formData.append("file", file);
     
     try {
+      const token = localStorage.getItem("token");
       const res = await fetch("http://localhost:8000/upload/", {
         method: "POST",
         body: formData,
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
       });
       
       if (!res.ok) {
+        if (res.status === 401) {
+          handleLogout();
+          return;
+        }
         throw new Error(`Failed to upload file: ${res.status} ${res.statusText}`);
       }
       
@@ -59,15 +85,21 @@ export default function Home() {
     setClauses([]);
 
     try {
+      const token = localStorage.getItem("token");
       const res = await fetch("http://localhost:8000/extract/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ text }),
       });
 
       if (!res.ok) {
+        if (res.status === 401) {
+          handleLogout();
+          return;
+        }
         const errorData = await res.json();
         throw new Error(`Failed to extract clauses: ${errorData.detail || res.statusText}`);
       }
@@ -95,15 +127,21 @@ export default function Home() {
     setSummary(null);
 
     try {
+      const token = localStorage.getItem("token");
       const res = await fetch("http://localhost:8000/summarize/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ text }),
       });
 
       if (!res.ok) {
+        if (res.status === 401) {
+          handleLogout();
+          return;
+        }
         const errorData = await res.json();
         throw new Error(`Failed to summarize document: ${errorData.detail || res.statusText}`);
       }
@@ -146,12 +184,25 @@ export default function Home() {
     return 'bg-red-100';
   };
 
+  // Don't render the main content if not authenticated
+  if (!authenticated) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
-        <header className="text-center py-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-2">LawMind</h1>
-          <p className="text-xl text-gray-600">AI-Powered Legal Document Analysis</p>
+        <header className="text-center py-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-2">LawMind</h1>
+            <p className="text-xl text-gray-600">AI-Powered Legal Document Analysis</p>
+          </div>
+          <button 
+            onClick={handleLogout}
+            className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300"
+          >
+            Logout
+          </button>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">

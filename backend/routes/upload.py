@@ -1,11 +1,15 @@
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File, Depends
+from services.auth_service import get_current_user
 import fitz  # PyMuPDF
 
 router = APIRouter(prefix="/upload", tags=["upload"])
 
 @router.post("/")
-async def upload_file(file: UploadFile = File(...)):
+async def upload_file(file: UploadFile = File(...), current_user = Depends(get_current_user)):
     try:
+        # Log the authenticated user
+        print(f"User {current_user.username} uploading file: {file.filename}")
+        
         # Read the file content
         content = await file.read()
         

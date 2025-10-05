@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from services import llama_service
+from services.auth_service import get_current_user
 import json
 
 router = APIRouter(prefix="/summarize", tags=["summarize"])
@@ -17,7 +18,9 @@ class SummarizeResponse(BaseModel):
     recommendations: list
 
 @router.post("/", response_model=SummarizeResponse)
-async def summarize_document(request: SummarizeRequest):
+async def summarize_document(request: SummarizeRequest, current_user = Depends(get_current_user)):
+    print(f"User {current_user.username} summarizing document")
+    
     if not request.text:
         raise HTTPException(status_code=400, detail="No text provided for summarization")
     

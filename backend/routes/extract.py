@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from services import cerebras_service
+from services.auth_service import get_current_user
 import traceback
 
 router = APIRouter(prefix="/extract", tags=["extract"])
@@ -13,10 +14,12 @@ class ExtractResponse(BaseModel):
     extracted_data: dict
 
 @router.post("/", response_model=ExtractResponse)
-async def extract_clauses(request: ExtractRequest):
+async def extract_clauses(request: ExtractRequest, current_user = Depends(get_current_user)):
     """
     Extract clauses from a legal document using Cerebras inference API.
     """
+    print(f"User {current_user.username} extracting clauses")
+    
     if not request.text:
         raise HTTPException(status_code=400, detail="No text provided for clause extraction")
     
