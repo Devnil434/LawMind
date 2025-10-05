@@ -2,8 +2,7 @@
 
 LawMind is an AI-powered legal document analysis platform that helps legal professionals and businesses analyze, understand, and assess legal documents with advanced risk scoring and summarization capabilities.
 
-![LawMind Dashboard](<img width="1899" height="819" alt="image" src="https://github.com/user-attachments/assets/3321d4f4-53e5-450f-9a31-a24591800b52" />
-)
+![LawMind Dashboard](https://raw.githubusercontent.com/user-attachments/assets/3321d4f4-53e5-450f-9a31-a24591800b52)
 
 ## 🚀 Key Features
 
