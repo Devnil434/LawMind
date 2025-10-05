@@ -78,8 +78,10 @@ lawmind/
 2. **Backend Setup:**
    ```bash
    cd backend
+   # Copy the example environment file and configure your API keys
+   cp .env.example .env
+   # Edit .env file with your actual API keys
    pip install -r requirements.txt
-   cp .env.example .env  # Configure your API keys
    python main.py
    ```
 
@@ -93,6 +95,16 @@ lawmind/
 4. **Access the Application:**
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:8000
+
+### Environment Variables
+
+Create a `.env` file in the `backend` directory with the following variables:
+- `CEREBRAS_API_KEY`: Your Cerebras API key for clause extraction
+- `LLAMA_API_KEY`: Your Meta Llama 3 API key for summarization
+- `SECRET_KEY`: Secret key for JWT token generation
+- `DEBUG`: Set to True for development, False for production
+
+**Note**: The `.env` file is ignored by Git to protect your API keys. Never commit actual API keys to the repository.
 
 ### Docker Deployment
 
