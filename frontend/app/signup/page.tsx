@@ -26,7 +26,8 @@ export default function Signup() {
     setSuccess(false);
 
     try {
-      const response = await fetch("http://localhost:8000/auth/signup", {
+      console.log("Attempting to signup with:", { username, email, password });
+      const response = await fetch("http://localhost:8001/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -38,18 +39,30 @@ export default function Signup() {
         }),
       });
 
+      console.log("Signup response status:", response.status);
+      console.log("Signup response headers:", response.headers);
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "An error occurred during signup");
+        let errorMessage = "An error occurred during signup";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.detail || errorMessage;
+        } catch (jsonError) {
+          // If JSON parsing fails, use the status text
+          errorMessage = response.statusText || errorMessage;
+        }
+        throw new Error(errorMessage);
       }
 
       setSuccess(true);
+      console.log("Signup successful");
       
       // Automatically redirect to login after a short delay
       setTimeout(() => {
         router.push("/login");
       }, 2000);
     } catch (err: any) {
+      console.error("Signup error:", err);
       setError(err.message || "An error occurred during signup");
     } finally {
       setLoading(false);

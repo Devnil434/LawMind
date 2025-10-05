@@ -45,7 +45,7 @@ export default function Home() {
     
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:8000/upload/", {
+      const res = await fetch("http://localhost:8001/upload/", {
         method: "POST",
         body: formData,
         headers: {
@@ -86,7 +86,7 @@ export default function Home() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:8000/extract/", {
+      const res = await fetch("http://localhost:8001/extract/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -128,7 +128,7 @@ export default function Home() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:8000/summarize/", {
+      const res = await fetch("http://localhost:8001/summarize/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -15,7 +15,8 @@ export default function Login() {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:8000/auth/login", {
+      console.log("Attempting to login with:", { username, password });
+      const response = await fetch("http://localhost:8001/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -26,11 +27,23 @@ export default function Login() {
         }),
       });
 
+      console.log("Login response status:", response.status);
+      console.log("Login response headers:", response.headers);
+
       if (!response.ok) {
-        throw new Error("Invalid username or password");
+        let errorMessage = "Invalid username or password";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.detail || errorMessage;
+        } catch (jsonError) {
+          // If JSON parsing fails, use the status text
+          errorMessage = response.statusText || errorMessage;
+        }
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();
+      console.log("Login successful, received data:", data);
       
       // Store the token in localStorage
       localStorage.setItem("token", data.access_token);
@@ -38,6 +51,7 @@ export default function Login() {
       // Redirect to the main page
       router.push("/");
     } catch (err: any) {
+      console.error("Login error:", err);
       setError(err.message || "An error occurred during login");
     } finally {
       setLoading(false);

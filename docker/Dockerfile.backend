@@ -9,11 +9,13 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONPATH=/app
 
-# Install system dependencies
+# Install system dependencies required for Python packages
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         build-essential \
         gcc \
+        g++ \
+        libpython3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements file
@@ -27,7 +29,7 @@ RUN pip install --no-cache-dir --upgrade pip \
 COPY backend/ .
 
 # Expose port
-EXPOSE 8000
+EXPOSE 8001
 
 # Run the application
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8001"]

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Depends
 from services.auth_service import get_current_user
-import fitz  # PyMuPDF
+from io import BytesIO
+from pypdf import PdfReader
 
 router = APIRouter(prefix="/upload", tags=["upload"])
 
@@ -20,10 +21,12 @@ async def upload_file(file: UploadFile = File(...), current_user = Depends(get_c
         
         # Check if it's a PDF file
         if file.content_type == "application/pdf":
-            # Process PDF with PyMuPDF
-            pdf = fitz.open(stream=content, filetype="pdf")
-            text = " ".join([page.get_text() for page in pdf])
-            pdf.close()
+            # Process PDF with pypdf
+            pdf_file = BytesIO(content)
+            pdf_reader = PdfReader(pdf_file)
+            text = ""
+            for page in pdf_reader.pages:
+                text += page.extract_text()
             return {"message": "PDF processed successfully", "content": text[:4000]}
         else:
             # For text files, try to decode the content
