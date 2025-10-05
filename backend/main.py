@@ -19,7 +19,7 @@ app = FastAPI(title="LawMind Backend")
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow requests from any origin for development
+    allow_origins=["http://localhost:3000"],  # Allow requests from the frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -54,4 +54,4 @@ async def comprehensive_analysis(request: dict):
 if __name__ == "__main__":
     import uvicorn
     print("Starting Uvicorn server...")
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

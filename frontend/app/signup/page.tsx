@@ -27,7 +27,7 @@ export default function Signup() {
 
     try {
       console.log("Attempting to signup with:", { username, email, password });
-      const response = await fetch("http://localhost:8001/auth/signup", {
+      const response = await fetch("http://localhost:8000/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

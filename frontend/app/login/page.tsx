@@ -16,7 +16,7 @@ export default function Login() {
 
     try {
       console.log("Attempting to login with:", { username, password });
-      const response = await fetch("http://localhost:8001/auth/login", {
+      const response = await fetch("http://localhost:8000/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",

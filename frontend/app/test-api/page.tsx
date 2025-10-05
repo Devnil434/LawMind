@@ -10,7 +10,7 @@ export default function TestAPI() {
     setResult("");
     
     try {
-      const response = await fetch("http://localhost:8001/");
+      const response = await fetch("http://localhost:8000/");
       const data = await response.json();
       setResult(`Success: ${JSON.stringify(data)}`);
     } catch (error: any) {
